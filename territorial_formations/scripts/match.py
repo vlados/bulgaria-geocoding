@@ -17,6 +17,9 @@ Match priority
   2. exact normalized name + parent bbox — confidence 0.9
   3. fuzzy (max of token_set_ratio, partial_ratio) >= 85 + parent bbox —
      confidence = score / 100
+  4. core-name match: strip generic prefixes ("Курортен комплекс",
+     "Природен парк", ...) from both sides and require ratio >= 95;
+     confidence 0.7. Handles NSI/OSM disagreement on the decoration.
 
 Names ending in a digit (e.g. "Бизнес парк Бургас 1") require an exact
 match — fuzzy is disabled to prevent collapsing numbered series.
@@ -53,9 +56,42 @@ MUNICIPALITIES_CSV = REPO_ROOT / "municipalities.csv"
 
 COORD_PRECISION = 6
 FUZZY_THRESHOLD = 85
+CORE_NAME_THRESHOLD = 95  # strict — prevents "Боровец" → "Боровете" collapse
 ENDS_WITH_DIGIT = re.compile(r"\d\s*$")
 QUOTE_CHARS = "\"'„“”«»‘’`´"
 WS_RE = re.compile(r"\s+")
+
+# Generic decorations stripped before "core name" comparison. NSI labels
+# resorts as "Курортен комплекс \"X\"" while OSM frequently has "Природен
+# парк X" or just "X" — the distinctive core is X. Order matters: longer
+# multi-word prefixes go first.
+GENERIC_PREFIXES = (
+    "ваканционно селище",
+    "курортен комплекс",
+    "промишлена зона",
+    "стопански двор",
+    "защитена местност",
+    "защитена територия",
+    "защитена зона",
+    "поддържан резерват",
+    "природен парк",
+    "национален парк",
+    "вилна зона",
+    "вилно селище",
+    "бизнес парк",
+    "индустриален парк",
+    "индустриална зона",
+    "резерват",
+    "курорт",
+    "квартал",
+    "местност",
+    "село",
+    "град",
+    "кв.",
+    "м.",
+    "с.",
+    "гр.",
+)
 
 
 # ---------- normalization ----------------------------------------------------
@@ -68,6 +104,26 @@ def normalize_name(value: str | None) -> str:
     s = s.translate({ord(c): " " for c in QUOTE_CHARS})
     s = s.replace(" ", " ")
     s = WS_RE.sub(" ", s).strip().lower()
+    return s
+
+
+def core_name(value: str | None) -> str:
+    """normalize_name() with the leading generic decoration stripped.
+
+    Examples:
+      "Курортен комплекс \"Златни пясъци\"" → "златни пясъци"
+      "Природен парк Златни пясъци"          → "златни пясъци"
+      "Курорт „Даулите\""                     → "даулите"
+    """
+    s = normalize_name(value)
+    if not s:
+        return ""
+    for prefix in GENERIC_PREFIXES:
+        if s == prefix:
+            return ""
+        if s.startswith(prefix + " "):
+            s = s[len(prefix) + 1 :].strip()
+            break
     return s
 
 
@@ -273,7 +329,10 @@ def osm_to_polygon(el: dict) -> Polygon | MultiPolygon | None:
 
 
 class Candidate:
-    __slots__ = ("osm_type", "osm_id", "tags", "geom", "centroid", "name_norm", "name_bg_norm")
+    __slots__ = (
+        "osm_type", "osm_id", "tags", "geom", "centroid",
+        "name_norm", "name_bg_norm", "name_core", "name_bg_core",
+    )
 
     def __init__(
         self,
@@ -290,6 +349,8 @@ class Candidate:
         self.centroid = (c.x, c.y)
         self.name_norm = normalize_name(tags.get("name") or "")
         self.name_bg_norm = normalize_name(tags.get("name:bg") or "")
+        self.name_core = core_name(tags.get("name") or "")
+        self.name_bg_core = core_name(tags.get("name:bg") or "")
 
 
 def load_candidates(path: Path) -> list[Candidate]:
@@ -412,17 +473,42 @@ def match_record(
         )
         if score >= FUZZY_THRESHOLD and _within_parent(c, parent_ekatte, area2_ekatte, parent_index):
             scored.append((score, c))
-    if not scored:
+    if scored:
+        scored.sort(key=lambda t: (-t[0], -t[1].geom.area))
+        top_score = scored[0][0]
+        top_tier = [c for s, c in scored if s == top_score]
+        best = max(top_tier, key=lambda c: c.geom.area)
+        note = "fuzzy match"
+        if len(top_tier) > 1:
+            note = f"fuzzy match; tied at {top_score} ({len(top_tier)} cands); kept largest"
+        return best, "name_fuzzy", round(top_score / 100.0, 3), note
+
+    # 4) core-name match — strip generic prefixes like "Курортен комплекс" /
+    # "Природен парк" and compare distinctive cores. Strict threshold (95)
+    # so similar but different names ("Боровец" vs "Боровете") don't collide.
+    nsi_core = core_name(name_bg)
+    if not nsi_core or len(nsi_core) < 4:
         return None, "none", 0.0, "no candidate within parent bbox"
 
-    scored.sort(key=lambda t: (-t[0], -t[1].geom.area))
-    top_score = scored[0][0]
-    top_tier = [c for s, c in scored if s == top_score]
+    core_scored: list[tuple[float, Candidate]] = []
+    for c in all_cands:
+        cc = c.name_core or c.name_bg_core
+        if not cc or len(cc) < 4:
+            continue
+        s = fuzz.ratio(nsi_core, cc)
+        if s >= CORE_NAME_THRESHOLD and _within_parent(c, parent_ekatte, area2_ekatte, parent_index):
+            core_scored.append((s, c))
+    if not core_scored:
+        return None, "none", 0.0, "no candidate within parent bbox"
+
+    core_scored.sort(key=lambda t: (-t[0], -t[1].geom.area))
+    top_score = core_scored[0][0]
+    top_tier = [c for s, c in core_scored if s == top_score]
     best = max(top_tier, key=lambda c: c.geom.area)
-    note = "fuzzy match"
+    note = f"core-name match (NSI core={nsi_core!r}, OSM core={best.name_core or best.name_bg_core!r})"
     if len(top_tier) > 1:
-        note = f"fuzzy match; tied at {top_score} ({len(top_tier)} cands); kept largest"
-    return best, "name_fuzzy", round(top_score / 100.0, 3), note
+        note += f"; {len(top_tier)} cands tied; kept largest"
+    return best, "name_core", 0.7, note
 
 
 # ---------- output -----------------------------------------------------------

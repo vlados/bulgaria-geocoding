@@ -16,8 +16,10 @@
 
 1. `ref:ekatte` точно съвпадение (увереност 1.0)
 2. Точно име в границите на родителското землище (увереност 0.9)
-3. Размито съвпадение `token_set_ratio ≥ 85` в родителското землище
-   (увереност = резултат / 100)
+3. Размито съвпадение в родителското землище — max от
+   `token_set_ratio` и `partial_ratio` ≥ 85 (увереност = резултат / 100)
+4. Съвпадение по „ядрено име“ (с премахнати общи префикси като
+   „Курортен комплекс“, „Природен парк“) — `ratio ≥ 95` (увереност 0.7)
 
 Записи без намерен полигон остават в CSV, но не влизат в GeoJSON.
 
@@ -47,7 +49,7 @@
 |---|---|
 | `osm_type` | `relation` или `way` |
 | `osm_id` | OSM идентификатор |
-| `match_method` | `ref_ekatte`, `name_exact` или `name_fuzzy` |
+| `match_method` | `ref_ekatte`, `name_exact`, `name_fuzzy` или `name_core` |
 | `match_confidence` | 0.0–1.0 (виж стратегията по-горе) |
 
 Координатите са закръглени до 6 знака след десетичната запетая. Записите са
@@ -104,8 +106,12 @@ NSI records by priority:
 
 1. `ref:ekatte` exact match (confidence 1.0)
 2. Exact name within parent settlement bbox (confidence 0.9)
-3. Fuzzy `token_set_ratio ≥ 85` within parent bbox
-   (confidence = score / 100)
+3. Fuzzy within parent bbox — max of `token_set_ratio` and `partial_ratio`
+   ≥ 85 (confidence = score / 100)
+4. "Core name" match — strip generic prefixes ("Курортен комплекс",
+   "Природен парк", etc.) on both sides and require `ratio ≥ 95`
+   (confidence 0.7). Catches the case where NSI says "Курортен комплекс
+   X" but OSM tags it as "Природен парк X".
 
 Records without a polygon remain in the CSV but are excluded from the
 GeoJSON.
@@ -136,7 +142,7 @@ CSV column plus:
 |---|---|
 | `osm_type` | `relation` or `way` |
 | `osm_id` | OSM identifier |
-| `match_method` | `ref_ekatte`, `name_exact`, or `name_fuzzy` |
+| `match_method` | `ref_ekatte`, `name_exact`, `name_fuzzy`, or `name_core` |
 | `match_confidence` | 0.0–1.0 (see strategy above) |
 
 Coordinates are rounded to 6 decimal places. Features are sorted by
