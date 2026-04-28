@@ -444,11 +444,16 @@ def make_feature(rec: dict[str, str], cand: Candidate, method: str, conf: float)
 
 
 def write_geojson(features: list[dict], path: Path) -> None:
+    """Match the repo's settlements.geojson style: compact, one feature per line."""
     features = sorted(features, key=lambda f: f["properties"]["ekatte"])
-    fc = {"type": "FeatureCollection", "features": features}
+    sep = (",", ":")
     with path.open("w", encoding="utf-8") as f:
-        json.dump(fc, f, ensure_ascii=False, indent=1, sort_keys=True)
-        f.write("\n")
+        f.write('{"type":"FeatureCollection","features":[\n')
+        for i, feat in enumerate(features):
+            if i:
+                f.write(",\n")
+            json.dump(feat, f, ensure_ascii=False, separators=sep)
+        f.write("\n]}\n")
 
 
 def write_log(rows: Iterable[dict[str, Any]], path: Path) -> None:
