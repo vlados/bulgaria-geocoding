@@ -38,11 +38,15 @@ DATA_DIR = ROOT / "data"
 RAW_JSON = DATA_DIR / "nsi_raw.json"
 OUT_CSV = ROOT / "territorial_formations.csv"
 
-# area1 looks like "Аксаково (00182)" or "Варна (VAR06)".
-# Capture trailing "(CODE)" where CODE is either 5-char EKATTE or NUTS4 (3 letters + 2 digits).
-PARENT_RE = re.compile(r"^(.*?)\s*\(([0-9A-Z]{5})\)\s*$")
+# area1 looks like "(67338) гр. Сливен, общ. Сливен, обл. Сливен"
+# or "(VAR06) общ. Варна, обл. Варна". CODE is either 5-digit EKATTE or
+# NUTS4 (3 letters + 2 digits).
+PARENT_RE = re.compile(r"^\s*\(([0-9A-Z]{5})\)\s*(.*)$")
 NUTS4_RE = re.compile(r"^[A-Z]{3}\d{2}$")
 EKATTE_RE = re.compile(r"^\d{5}$")
+# Strip leading administrative-unit markers from the parent name so we keep
+# just the place name (e.g. "гр. Сливен, общ. Сливен, обл. Сливен" → "Сливен").
+PARENT_NAME_PREFIX = re.compile(r"^\s*(гр\.|с\.|кв\.|общ\.|обл\.)\s*", re.UNICODE)
 
 CSV_FIELDS = [
     "ekatte",
@@ -89,10 +93,13 @@ def _get(session: requests.Session, url: str, *, attempts: int = 5, timeout: int
 
 
 def parse_area(value: str | None) -> tuple[str, str, bool]:
-    """Split "Name (CODE)" into (code, name, is_nuts4).
+    """Split "(CODE) name, общ. X, обл. Y" into (code, place_name, is_nuts4).
 
     Returns ("", "", False) when value is empty.
     Returns ("", value.strip(), False) when no code is present.
+
+    The trailing administrative path (общ. ..., обл. ...) is dropped so the
+    parent name matches the corresponding settlements/municipalities entry.
     """
     if not value:
         return "", "", False
@@ -100,13 +107,15 @@ def parse_area(value: str | None) -> tuple[str, str, bool]:
     m = PARENT_RE.match(text)
     if not m:
         return "", text, False
-    name = m.group(1).strip()
-    code = m.group(2).strip()
+    code = m.group(1).strip()
+    rest = m.group(2).strip()
+    # Take only the first comma-separated chunk (the place itself).
+    head = rest.split(",", 1)[0].strip()
+    head = PARENT_NAME_PREFIX.sub("", head).strip()
     is_nuts4 = bool(NUTS4_RE.match(code))
     if not (is_nuts4 or EKATTE_RE.match(code)):
-        # Unknown code shape — keep raw, don't claim NUTS4
-        return code, name, False
-    return code, name, is_nuts4
+        return code, head, False
+    return code, head, is_nuts4
 
 
 def _coerce_ekatte(value: Any) -> str:
@@ -142,6 +151,9 @@ def normalize(rows: list[dict[str, Any]]) -> list[dict[str, str]]:
     out: list[dict[str, str]] = []
     for row in rows:
         ekatte = _coerce_ekatte(_row_get(row, "ekatte", "EKATTE"))
+        if not ekatte:
+            # NSI ships an empty sentinel as the first record — skip it.
+            continue
         name_bg = _row_get(row, "name", "name_bg", "nameBg", "imeBg")
         name_en = _row_get(row, "nameLatin", "name_en", "nameEn", "imeLat")
         kind = _coerce_kind(_row_get(row, "kind", "vid", "type"))

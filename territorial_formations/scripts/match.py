@@ -15,7 +15,8 @@ Outputs
 Match priority
   1. ref:ekatte tag — confidence 1.0
   2. exact normalized name + parent bbox — confidence 0.9
-  3. fuzzy (token_set_ratio >= 85) + parent bbox — confidence = score / 100
+  3. fuzzy (max of token_set_ratio, partial_ratio) >= 85 + parent bbox —
+     confidence = score / 100
 
 Names ending in a digit (e.g. "Бизнес парк Бургас 1") require an exact
 match — fuzzy is disabled to prevent collapsing numbered series.
@@ -394,12 +395,21 @@ def match_record(
     if ENDS_WITH_DIGIT.search(name_bg):
         return None, "none", 0.0, "no exact match; fuzzy disabled (numbered name)"
 
+    # NSI names are usually decorated ("Курортен комплекс \"Слънчев бряг\"")
+    # while OSM carries the bare place name ("Слънчев бряг"). token_set_ratio
+    # undercounts that case (~50–60), so we also try partial_ratio, which
+    # finds the best substring alignment of the shorter inside the longer.
+    # parent_bbox is the spatial guard against accidental hits.
     scored: list[tuple[float, Candidate]] = []
     for c in all_cands:
         n = c.name_norm or c.name_bg_norm
-        if not n:
+        if not n or len(n) < 4:
+            # Reject ultra-short OSM names — they substring-match almost anything.
             continue
-        score = fuzz.token_set_ratio(nname, n)
+        score = max(
+            fuzz.token_set_ratio(nname, n),
+            fuzz.partial_ratio(nname, n),
+        )
         if score >= FUZZY_THRESHOLD and _within_parent(c, parent_ekatte, area2_ekatte, parent_index):
             scored.append((score, c))
     if not scored:

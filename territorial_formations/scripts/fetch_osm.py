@@ -48,6 +48,15 @@ area["ISO3166-1"="BG"][admin_level=2]->.bg;
   // Quarters and neighbourhoods (квартали, вилни зони)
   nwr["place"~"^(quarter|neighbourhood|locality|suburb)$"](area.bg);
 
+  // Resort/dormitory places that are sometimes drawn as polygons rather
+  // than nodes (Слънчев бряг, Боровец, Пампорово, Дюни). Limit to ways
+  // and relations so we don't flood with ~5k point places.
+  way["place"~"^(town|village|hamlet|isolated_dwelling)$"]["name"](area.bg);
+  relation["place"~"^(town|village|hamlet|isolated_dwelling)$"]["name"](area.bg);
+
+  // National parks and protected areas — captures Златни пясъци, Pirin etc.
+  nwr["boundary"~"^(national_park|protected_area)$"]["name"](area.bg);
+
   // Generic boundary tagged as territorial formation
   nwr["boundary"="administrative"]["admin_level"~"^(9|10|11)$"](area.bg);
 );
