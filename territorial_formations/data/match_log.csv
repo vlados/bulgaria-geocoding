@@ -1,0 +1,169 @@
+ekatte,name_bg,kind,decision,osm_type,osm_id,score,reason
+91076,Курорт „Даулите“,2,none,,,0.000,no candidate within parent bbox
+94015,"Курортен комплекс ""Златни пясъци""",1,name_core,relation,13491682,0.700,"core-name match (NSI core='златни пясъци', OSM core='златни пясъци')"
+94023,ВЕЦ Долна Бешовица на р. Искър,2,none,,,0.000,no candidate within parent bbox
+94037,Узунджата,2,none,,,0.000,no candidate within parent bbox
+94040,"Курортен комплекс ""Св. св. Константин и Елена""",1,none,,,0.000,no candidate within parent bbox
+94085,"Курортен комплекс ""Международен младежки център - Приморско""",1,none,,,0.000,no candidate within parent bbox
+94099,Семково,2,none,,,0.000,no candidate within parent bbox
+94112,Цигов чарк,2,name_exact,way,1079386762,0.900,exact name + parent bbox
+94126,ДЗС,2,none,,,0.000,no candidate within parent bbox
+94130,Стълпище,2,name_exact,way,1007550265,0.900,exact name + parent bbox
+94143,Кария,2,none,,,0.000,no candidate within parent bbox
+94157,Червенка,2,name_fuzzy,way,1081933504,1.000,fuzzy match
+94160,Гладно поле,2,none,,,0.000,no candidate within parent bbox
+94174,"Вилна зона ""Крушов баир""",2,none,,,0.000,no candidate within parent bbox
+94188,Пети километър,2,name_fuzzy,relation,14460663,0.923,fuzzy match
+94191,Хайдушки поляни,2,none,,,0.000,no candidate within parent bbox
+94201,Кринчовица,2,none,,,0.000,no candidate within parent bbox
+94215,Черешево,2,none,,,0.000,no candidate within parent bbox
+94229,Перчемлията,2,none,,,0.000,no candidate within parent bbox
+94232,Долна Трака,2,none,,,0.000,no candidate within parent bbox
+94246,Припек,2,name_fuzzy,way,135973568,1.000,fuzzy match
+94256,Орехчето,2,name_fuzzy,way,1040038772,1.000,fuzzy match
+94263,Черешова градина,2,none,,,0.000,no candidate within parent bbox
+94277,Крушова градина,2,none,,,0.000,no candidate within parent bbox
+94280,Панорама,2,none,,,0.000,no candidate within parent bbox
+94294,Балъм дере,2,none,,,0.000,no candidate within parent bbox
+94304,Ментеше,2,none,,,0.000,no candidate within parent bbox
+94318,Кочмар,2,name_fuzzy,way,148339697,1.000,fuzzy match
+94321,Планова,2,name_fuzzy,way,148339707,1.000,fuzzy match; tied at 100.0 (2 cands); kept largest
+94335,Пчелина,2,none,,,0.000,no candidate within parent bbox
+94349,Сълзица,2,name_fuzzy,way,148346078,1.000,fuzzy match
+94352,Сотира,2,name_fuzzy,way,95458013,1.000,fuzzy match
+94366,Боровец-север,2,none,,,0.000,no candidate within parent bbox
+94371,Боровец-юг,2,none,,,0.000,no candidate within parent bbox
+94383,Ракитника,2,name_fuzzy,way,317124502,1.000,fuzzy match
+94397,Прибой,2,none,,,0.000,no candidate within parent bbox
+94407,Зеленика-част,2,none,,,0.000,no candidate within parent bbox
+94410,Летище,2,none,,,0.000,no candidate within parent bbox
+94424,Под селото,2,name_fuzzy,way,1189853935,1.000,fuzzy match
+94438,Акчелар,2,none,,,0.000,no candidate within parent bbox
+94441,Телевизионна кула,2,name_fuzzy,way,174652096,1.000,fuzzy match
+94455,Горна трака,2,none,,,0.000,no candidate within parent bbox
+94469,Добрева чешма,2,name_fuzzy,relation,12156262,1.000,fuzzy match; tied at 100.0 (2 cands); kept largest
+94472,Виница-север,2,none,,,0.000,no candidate within parent bbox
+94486,Ваялар,2,none,,,0.000,no candidate within parent bbox
+94497,Траката-разширение,2,none,,,0.000,no candidate within parent bbox
+94502,Фатрико дере,2,none,,,0.000,no candidate within parent bbox
+94513,Дели сава,2,none,,,0.000,no candidate within parent bbox
+94527,Манастирски рид,2,none,,,0.000,no candidate within parent bbox
+94530,Бялата чешма и Дъбравата,2,name_fuzzy,way,949426389,1.000,fuzzy match
+94544,Ален мак,2,none,,,0.000,no candidate within parent bbox
+94558,XI шахта,2,none,,,0.000,no candidate within parent bbox
+94561,Острицата,2,none,,,0.000,no candidate within parent bbox
+94575,Сухото дере,2,none,,,0.000,no candidate within parent bbox
+94589,Каптажа,2,none,,,0.000,no candidate within parent bbox
+94592,Лозницата,2,none,,,0.000,no candidate within parent bbox
+94602,Бадемите,2,none,,,0.000,no candidate within parent bbox
+94616,Пръстницата,2,none,,,0.000,no candidate within parent bbox
+94628,Брястите,2,none,,,0.000,no candidate within parent bbox
+94633,Лозята,2,none,,,0.000,no candidate within parent bbox
+94647,Батака,2,none,,,0.000,no candidate within parent bbox
+94650,Върбицата,2,none,,,0.000,no candidate within parent bbox
+94664,Заслона,2,none,,,0.000,no candidate within parent bbox
+94678,Край канала,2,none,,,0.000,no candidate within parent bbox
+94681,Черниците,2,none,,,0.000,no candidate within parent bbox
+94695,Училищното,2,none,,,0.000,no candidate within parent bbox
+94705,Трите кладенчета,2,none,,,0.000,no candidate within parent bbox
+94719,Инцараки,2,none,,,0.000,no candidate within parent bbox
+94722,Чолакова чешма,2,none,,,0.000,no candidate within parent bbox
+94736,Янчева поляна,2,none,,,0.000,no candidate within parent bbox
+94743,Терасите,2,none,,,0.000,no candidate within parent bbox
+94753,Доброгледски лозя,2,none,,,0.000,no candidate within parent bbox
+94767,Трите воденици,2,none,,,0.000,no candidate within parent bbox
+94770,Студен кладенец,2,none,,,0.000,no candidate within parent bbox
+94784,Лозите,2,name_fuzzy,way,1169522175,1.000,fuzzy match
+94798,Черноморска панорама,2,none,,,0.000,no candidate within parent bbox
+94808,Поляните,2,none,,,0.000,no candidate within parent bbox
+94811,Панорама I,2,none,,,0.000,no candidate within parent bbox
+94825,Панорама II,2,none,,,0.000,no candidate within parent bbox
+94839,Панорама III,2,none,,,0.000,no candidate within parent bbox
+94842,Могилите,2,name_fuzzy,way,265053345,1.000,fuzzy match
+94856,Баш Самоков,2,none,,,0.000,no candidate within parent bbox
+94869,Чичера,2,none,,,0.000,no candidate within parent bbox
+94873,Суха река,2,none,,,0.000,no candidate within parent bbox
+94887,Райкьовец,2,none,,,0.000,no candidate within parent bbox
+94890,Котката,2,none,,,0.000,no candidate within parent bbox
+94900,Горунака,2,none,,,0.000,no candidate within parent bbox
+94914,Хаджирашова чешма,2,none,,,0.000,no candidate within parent bbox
+94928,Рибарника,2,none,,,0.000,no candidate within parent bbox
+94931,Стубела,2,none,,,0.000,no candidate within parent bbox
+94945,Рибарица,2,none,,,0.000,no candidate within parent bbox
+94959,Над язовира,2,none,,,0.000,no candidate within parent bbox
+94962,Кобиля,2,none,,,0.000,no candidate within parent bbox
+94976,Спиловица,2,none,,,0.000,no candidate within parent bbox
+94984,Шарковото,2,none,,,0.000,no candidate within parent bbox
+94993,Пашовото,2,none,,,0.000,no candidate within parent bbox
+95008,Долни дол,2,none,,,0.000,no candidate within parent bbox
+95011,Манастирското,2,none,,,0.000,no candidate within parent bbox
+95025,Златичора,2,none,,,0.000,no candidate within parent bbox
+95039,Язовир Батак,2,none,,,0.000,no candidate within parent bbox
+95042,"Курорт ""Сливенски минерални бани""",2,none,,,0.000,no candidate within parent bbox
+95056,"Курорт ""Огняновски минерални бани""",2,none,,,0.000,no candidate within parent bbox
+95066,Кюмбетите,2,name_fuzzy,way,1053707477,1.000,fuzzy match
+95073,Шашкъните,2,none,,,0.000,no candidate within parent bbox
+95087,Фазанарията,2,name_fuzzy,way,1060013582,1.000,fuzzy match
+95090,Солницата,2,none,,,0.000,no candidate within parent bbox
+95100,Индустриална зона Летница,2,none,,,0.000,no candidate within parent bbox
+95114,Фотоволтаичен парк - Адата,2,none,,,0.000,no candidate within parent bbox
+95128,Промишлена зона - Искра,2,none,,,0.000,no candidate within parent bbox
+95131,Фотоволтаичен парк - Кунин Ямач,2,none,,,0.000,no candidate within parent bbox
+95145,Фотоволтаичен парк - Чилингирско,2,none,,,0.000,no candidate within parent bbox
+95159,Фотоволтаичен парк - Мерата,2,none,,,0.000,no candidate within parent bbox
+95162,Индустриален парк Шумен,2,none,,,0.000,no candidate within parent bbox
+95176,Хоталич,2,none,,,0.000,no candidate within parent bbox
+95181,"Планински туристически комплекс ""Беклемето""",2,none,,,0.000,no candidate within parent bbox
+95193,Арапя,2,none,,,0.000,no candidate within parent bbox
+95203,Боруна,2,none,,,0.000,no candidate within parent bbox
+95217,Диньов гьол,2,none,,,0.000,no candidate within parent bbox
+95220,Нестинарка,2,none,,,0.000,no candidate within parent bbox
+95234,Оазис,2,none,,,0.000,no candidate within parent bbox
+95248,Тарфа,2,none,,,0.000,no candidate within parent bbox
+95251,Севлиевски лозя,2,none,,,0.000,no candidate within parent bbox
+95265,Чифлика,2,none,,,0.000,no candidate within parent bbox
+95279,"""Кунино Енерджи"" - АД, Сградоцентрала",2,none,,,0.000,no candidate within parent bbox
+95282,"""Кунино Енерджи"" - АД, Бетонов възел",2,none,,,0.000,no candidate within parent bbox
+95296,Индустриална зона Куклен,2,none,,,0.000,no candidate within parent bbox
+95306,Курортен комплекс Върбица,2,none,,,0.000,no candidate within parent bbox
+95312,Пристанище,2,none,,,0.000,no candidate within parent bbox
+95323,Помпена станция,2,none,,,0.000,no candidate within parent bbox
+95337,Индустриална зона Марица,2,name_exact,way,441758761,0.900,exact name + parent bbox
+95340,Бизнес парк Бургас 1,2,none,,,0.000,no exact match; fuzzy disabled (numbered name)
+95354,Бизнес парк Бургас 2,2,none,,,0.000,no exact match; fuzzy disabled (numbered name)
+95368,Бизнес парк Бургас 3,2,none,,,0.000,no exact match; fuzzy disabled (numbered name)
+95371,Бизнес парк Бургас 4,2,none,,,0.000,no exact match; fuzzy disabled (numbered name)
+95385,Бизнес парк Бургас 5,2,none,,,0.000,no exact match; fuzzy disabled (numbered name)
+95399,Фотоволтаичен парк Мочура,2,none,,,0.000,no candidate within parent bbox
+95409,Бизнес парк Сарафово,2,none,,,0.000,no candidate within parent bbox
+95412,Бизнес парк Меден рудник,2,name_fuzzy,way,709274800,0.867,fuzzy match
+95426,Бизнес парк Крайморие,2,none,,,0.000,no candidate within parent bbox
+95438,Рибарско селище,2,none,,,0.000,no candidate within parent bbox
+95443,Птицата,2,none,,,0.000,no candidate within parent bbox
+95457,Шилото,2,none,,,0.000,no candidate within parent bbox
+95460,Брастите - 1,2,none,,,0.000,no exact match; fuzzy disabled (numbered name)
+95474,Брастите - 2,2,none,,,0.000,no exact match; fuzzy disabled (numbered name)
+95488,Каменица - Изворите,2,none,,,0.000,no candidate within parent bbox
+95491,Тополите,2,none,,,0.000,no candidate within parent bbox
+95501,Черни дол,2,none,,,0.000,no candidate within parent bbox
+95515,Росенец,2,name_fuzzy,way,229823810,1.000,fuzzy match
+95529,Пирин,2,name_exact,relation,14392475,0.900,exact name + parent bbox
+95532,Шато Бургозоне,2,none,,,0.000,no candidate within parent bbox
+95546,Китка,2,none,,,0.000,no candidate within parent bbox
+95553,Върбите,2,none,,,0.000,no candidate within parent bbox
+95563,Балабанчево,2,none,,,0.000,no candidate within parent bbox
+95577,Каменско,2,none,,,0.000,no candidate within parent bbox
+95580,Черноморска панорама Ювез,2,none,,,0.000,no candidate within parent bbox
+95594,Хълмовете на Плана,2,none,,,0.000,no candidate within parent bbox
+95604,Туристически комплекс Армира,2,none,,,0.000,no candidate within parent bbox
+95618,Жабокрек,2,none,,,0.000,no candidate within parent bbox
+95621,Кичево – север,2,none,,,0.000,no candidate within parent bbox
+96007,Равно расте,2,none,,,0.000,no candidate within parent bbox
+96147,Побит камък,2,none,,,0.000,no candidate within parent bbox
+96462,Къмпинг – Добруджа,2,none,,,0.000,no candidate within parent bbox
+98212,"Курортен комплекс ""Слънчев бряг""",1,none,,,0.000,no candidate within parent bbox
+98226,"Курортен комплекс ""Боровец""",1,none,,,0.000,no candidate within parent bbox
+98230,"Курортен комплекс ""Пампорово""",1,none,,,0.000,no candidate within parent bbox
+98260,"Ваканционно селище ""Дюни""",1,none,,,0.000,no candidate within parent bbox
+99070,Курорт „Карандила“,2,none,,,0.000,no candidate within parent bbox
+99958,"Курортен комплекс ""Албена""",1,name_fuzzy,relation,18615553,1.000,fuzzy match
