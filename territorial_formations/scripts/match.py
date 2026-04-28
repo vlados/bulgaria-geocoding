@@ -580,7 +580,7 @@ def report(records: list[dict[str, str]], log: list[dict[str, Any]]) -> None:
     print("\n==== match report ====", file=sys.stderr)
     print(f"  total NSI records:    {total}", file=sys.stderr)
     print(f"  matched:              {len(matched_ekatte)} ({100*len(matched_ekatte)/max(total,1):.1f}%)", file=sys.stderr)
-    for k in ("ref_ekatte", "name_exact", "name_fuzzy", "none"):
+    for k in ("ref_ekatte", "name_exact", "name_fuzzy", "name_core", "none"):
         print(f"    {k:11s} {by_method.get(k,0)}", file=sys.stderr)
 
     print("  by kind (matched / total):", file=sys.stderr)

@@ -81,11 +81,26 @@ python3 scripts/match.py        # → territorial_formations.geojson + match_log
   на OSM — **Open Database License (ODbL)**. При използване е задължително
   посочване „© OpenStreetMap contributors“ и запазване на ODbL.
 
-### Известни ограничения
-- Покритието не е пълно — много образувания все още нямат полигон в OSM.
-  Записите с `kind=1` (национално значение), за които не е намерено
-  съвпадение, се изброяват изрично от `match.py` в края на отчета — те са с
-  най-висок приоритет за допълване ръчно.
+### Покритие (текущо)
+От последното изпълнение: 25 от 168 записа имат полигон (~15 %).
+`kind=1` (национално значение) — 2 от 8 (Албена, Златни пясъци).
+Подробности виж в English / Coverage stats по-долу.
+
+### Известни празноти в OSM (kind=1)
+Следните национално значими образувания имат код в EKATTE, но **нямат
+полигон в OSM** — само нодове или нищо. Изключени са от GeoJSON; за
+покритие е нужно първо да бъдат начертани в OSM:
+
+- 94040 КК „Св. св. Константин и Елена“ — само нод
+- 94085 ММЦ „Приморско“ — изобщо няма елемент
+- 98212 КК „Слънчев бряг“ — само нодове
+- 98226 КК „Боровец“ (ски курорт) — само нодове; единственият полигон
+  „Резерват Боровец“ е в Кърджалийско, не в Самоковско
+- 98230 КК „Пампорово“ — само нод
+- 98260 ВС „Дюни“ — само нод; полигоните „Пясъчни дюни“ са защитени зони
+  за пясъчни дюни, не курортът
+
+### Други ограничения
 - Имена с латински числа (`XI шахта`) и дигитални суфикси (`Бизнес парк
   Бургас 1..5`) се обработват точно — размитият матчинг е изключен за имена,
   завършващи на цифра, за да не се обединяват номерирани серии.
@@ -173,36 +188,49 @@ CSV are byte-identical run to run (sorted by `ekatte`, fixed coordinate
 precision, `ensure_ascii=False`).
 
 ### Coverage stats
-The numbers below are populated from `match.py`'s report. Re-run
-`./scripts/build.sh` and paste the latest figures here:
+From the most recent `./scripts/build.sh` run (paste the new totals after
+each refresh):
 
 ```
-total NSI records:    <pending>
-matched:              <pending> (<pending>%)
-  ref_ekatte          <pending>
-  name_exact          <pending>
-  name_fuzzy          <pending>
-  none                <pending>
+total NSI records:    168
+matched:              25 (~15%)
+  ref_ekatte          0
+  name_exact          4
+  name_fuzzy          20
+  name_core           1
+  none                143
 ```
 
-> **Note**: this branch ships the **pipeline** but not yet the materialized
-> outputs. The build environment used to generate the scripts had no
-> outbound access to `nsi.bg` and `overpass-api.de`, so a maintainer needs
-> to run `./scripts/build.sh` once on a machine with internet access to
-> populate `territorial_formations.csv`, `territorial_formations.geojson`
-> and `data/match_log.csv`. After the first run, the coverage numbers and
-> the `kind=1` (national-significance) gap list should be pasted into this
-> README.
+By kind: `kind=1` (national significance) 2/8 matched; `kind=2` (local)
+23/160. The 0% on `ref_ekatte` is expected — almost no Bulgarian OSM
+mapper has tagged territorial formations with `ref:ekatte`. Adding those
+tags upstream is the cheapest way to grow coverage.
+
+### Known upstream OSM gaps (kind=1)
+For these well-known resorts NSI has an EKATTE code but OSM does not yet
+have a corresponding polygon — only point nodes (or no feature at all).
+They are excluded from the GeoJSON and need to be drawn in OSM before
+this pipeline can match them. Verified with `scripts/diagnose.py --grep`
+and `--osm <id>`:
+
+| ekatte | name | parent | OSM state |
+|---|---|---|---|
+| 94040 | Курортен комплекс „Св. св. Константин и Елена“ | Варна (VAR06) | one `place=resort` node only |
+| 94085 | Курортен комплекс „Международен младежки център – Приморско“ | Приморско (BGS27) | no element at all |
+| 98212 | Курортен комплекс „Слънчев бряг“ | Несебър (BGS15) | three nodes (`allotments`, `suburb`) — no polygon |
+| 98226 | Курортен комплекс „Боровец“ (ски курорт) | Самоков (SFO39) | seven place nodes; the only polygon "Резерват Боровец" is a different reserve in Кърджали, not the ski resort |
+| 98230 | Курортен комплекс „Пампорово“ | Смолян (SML31) | one `allotments` node only |
+| 98260 | Ваканционно селище „Дюни“ | Созопол (BGS21) | one hamlet node; nearby "Пясъчни дюни" polygons are sand-dune protected areas, not the resort |
 
 ### Spot-check targets
-After the first build, verify these well-known formations are present and
-visually correct:
+After each build, verify these are present and visually correct:
 
-- Албена (Albena)
-- Златни пясъци (Zlatni Pyasatsi / Golden Sands)
-- Слънчев бряг (Slanchev Bryag / Sunny Beach)
-- Св. св. Константин и Елена (Sveti Konstantin i Elena)
-- Боровец (Borovets)
+- Албена (Albena) — matched (`name_fuzzy`)
+- Златни пясъци (Zlatni Pyasatsi / Golden Sands) — matched via `name_core`
+  to OSM `relation/13491682` "Природен парк Златни пясъци"
+- Слънчев бряг, Боровец, Пампорово, Дюни, Св. св. Константин и Елена,
+  Международен младежки център – Приморско — see *Known upstream OSM gaps*
+  above; pipeline working as intended, polygons missing in OSM
 
 ### License
 - NSI registry: public data from the National Statistical Institute.
