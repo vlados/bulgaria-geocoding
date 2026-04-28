@@ -12,16 +12,16 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 PY=${PYTHON:-python3}
-ARGS=()
+CACHED=""
 if [[ "${1:-}" == "--cached" ]]; then
-  ARGS+=(--cached)
+  CACHED="--cached"
 fi
 
 echo "==> 1/3 NSI registry"
-"$PY" scripts/fetch_nsi.py "${ARGS[@]}"
+"$PY" scripts/fetch_nsi.py ${CACHED:+"$CACHED"}
 
 echo "==> 2/3 OSM polygons (Overpass)"
-"$PY" scripts/fetch_osm.py "${ARGS[@]}"
+"$PY" scripts/fetch_osm.py ${CACHED:+"$CACHED"}
 
 echo "==> 3/3 matching + GeoJSON"
 "$PY" scripts/match.py
